@@ -1,0 +1,100 @@
+Estrutura do Estado:
+
+typedef struct estado{
+	int x;
+	int y;
+	int f;
+	Estado *pai;
+} Estado;
+
+
+Busca pseudocodigo + C:
+Estado *BuscaCaminho(Estado inicio, Estado meta, Estado *caminho, Estado *fila){
+	Estado *pt;
+	Estado Prim;
+
+	se fila vazia{
+		Prim = inicio;
+	}senao{
+		Prim = fila[1];
+		retira fila[1] da fila;
+	}
+
+	while(Prim != meta){
+		addFilaOrdenada(sucessores(Prim));
+
+		se fila vazia{
+			Prim = inicio;
+		}senao{
+			Prim = fila[1];
+			retira fila[1] da fila;
+		}
+	}
+	
+	pt = Prim;
+	while(pt != NULL){
+		addNaUltimaPosDoCaminho(pt);
+		pt = pt->pai;
+	}
+	return caminho;
+}
+
+
+Busca C:
+Estado *BuscaCaminho(Estado inicio, Estado meta, Estado *caminho, Estado *fila, mapa[42][42]){
+	int fDir=0, fEsq=0; fCim=0; fBai=0;
+	Estado *pt;
+	Estado Prim;
+
+	se fila vazia{
+		Prim = inicio;
+	}senao{
+		Prim = fila[1];
+		retira fila[1] da fila;
+	}
+
+	while(Prim != meta){
+
+		// f = custo + heuristica
+		fDir = mapa[atual->y][(atual->x)+1] + abs(objetivo.x - (atual->x + 1)) + abs(objetivo.y - atual->y);
+		fEsq = mapa[atual->y][(atual->x)-1] + abs(objetivo.x - (atual->x - 1)) + abs(objetivo.y - atual->y);
+		fCim = mapa[(atual->y)-1][atual->x] + abs(objetivo.x - atual->x) + abs(objetivo.y - (atual->y - 1));
+		fBai = mapa[(atual->y)+1][atual->x] + abs(objetivo.x - atual->x) + abs(objetivo.y - (atual->y + 1));
+
+		aloca(Dir);
+		aloca(Esq);
+		aloca(Cim);
+		aloca(Bai);
+
+		preenche(Dir);
+		preenche(Esq);
+		preenche(Cim);
+		preenche(Bai);
+
+		Dir.pai = Prim;
+		Esq.pai = Prim;
+		Cim.pai = Prim;
+		Bai.pai = Prim;		
+
+		addFilaOrdenada(Dir);
+		addFilaOrdenada(Esq);
+		addFilaOrdenada(Cim);
+		addFilaOrdenada(Bai);
+
+		se fila vazia{
+			Prim = inicio;
+		}senao{
+			Prim = fila[1];
+			retira fila[1] da fila;
+		}
+	}
+	
+	// se Prim é a meta
+
+	pt = Prim;
+	while(pt != NULL){
+		addNaUltimaPosDoCaminho(pt);
+		pt = pt->pai;
+	}
+	return caminho;
+}
